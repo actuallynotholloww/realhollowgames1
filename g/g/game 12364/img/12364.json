@@ -1,0 +1,62 @@
+{
+  "ddlc": {
+    "item": false,
+    "image": "img/hollow.png",
+    "rarity": "Common",
+    "destination": "Settings.html",
+    "cinematic": "short"
+  },
+  "butt": {
+    "item": false,
+    "image": "img/hollow.png",
+    "rarity": "Common",
+    "destination": "settings.html",
+    "cinematic": "long"
+  },
+  "verity": {
+    "item": true,
+    "codeName": "Verity",
+    "itemName": "Verity",
+    "rarity": "mythic",
+    "image": "g/g/game 12364/img/verity.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+  },
+  "Falsity": {
+    "item": true,
+    "codeName": "Falsity",
+    "itemName": "Falsity",
+    "rarity": "legendary",
+    "image": "g/g/game 12364/img/falsity.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+  },
+  "48594": {
+    "item": true,
+    "codeName": "48594",
+    "itemName": "gayity",
+    "rarity": "mythic",
+    "image": "g/g/game 12364/img/gayity.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+  },
+  "MLGBABY": {
+    "item": true,
+    "codeName": "supermlg",
+    "itemName": "MLG",
+    "rarity": "rare",
+    "image": "g/g/game 12364/img/MLG!.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+  },
+  "09854": {
+    "item": true,
+    "codeName": "09854",
+    "itemName": "Freakity",
+    "rarity": "rare",
+    "image": "g/g/game 12364/img/MLG!.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+  }
+}
+

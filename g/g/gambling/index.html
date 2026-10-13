@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divine Mythic Spin Wheel</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    background:
+        radial-gradient(circle at 50% 10%, #4c1d95 0%, #1a0b35 40%, #05030a 100%);
+    text-align: center;
+    overflow-x: hidden;
+}
+
+h1 {
+    margin: 25px 10px 5px;
+    font-size: clamp(30px, 7vw, 55px);
+    text-shadow:
+        0 0 10px #c084fc,
+        0 0 30px #9333ea;
+}
+
+.subtitle {
+    color: #ddd6fe;
+    margin-bottom: 12px;
+}
+
+.counter {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.2);
+    box-shadow: 0 0 15px rgba(168,85,247,.25);
+}
+
+#spinsRemaining {
+    color: #f0abfc;
+    font-weight: bold;
+}
+
+/* ==============================
+   WHEEL
+============================== */
+
+.wheel-area {
+    position: relative;
+    width: min(92vw, 650px);
+    aspect-ratio: 1;
+    margin: auto;
+}
+
+#wheel {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter:
+        drop-shadow(0 0 20px rgba(168,85,247,.7))
+        drop-shadow(0 0 45px rgba(168,85,247,.25));
+}
+
+.pointer {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 58px solid white;
+    filter:
+        drop-shadow(0 0 5px white)
+        drop-shadow(0 0 12px #c084fc);
+    z-index: 10;
+}
+
+.center-button {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+    border: 6px solid white;
+
+    background:
+        radial-gradient(circle, #a855f7, #581c87);
+
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 15px #c084fc,
+        0 0 35px #9333ea;
+
+    z-index: 8;
+}
+
+.center-button:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+}
+
+.center-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ==============================
+   RESULT
+============================== */
+
+.result {
+    display: none;
+
+    width: min(90%, 550px);
+    margin: 25px auto;
+
+    padding: 25px;
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(124,58,237,.4),
+            rgba(15,5,30,.95)
+        );
+
+    border: 2px solid rgba(255,255,255,.25);
+
+    box-shadow:
+        0 0 30px rgba(168,85,247,.5);
+}
+
+.result.show {
+    display: block;
+    animation: resultPop .6s ease;
+}
+
+.result img {
+    width: 150px;
+    height: 150px;
+
+    object-fit: cover;
+
+    border-radius: 20px;
+
+    border: 4px solid white;
+
+    box-shadow:
+        0 0 15px white,
+        0 0 35px #a855f7;
+}
+
+.result h2 {
+    font-size: clamp(25px, 6vw, 38px);
+    margin: 15px 0 10px;
+}
+
+.redeem {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #e9d5ff;
+}
+
+.legendary-result {
+    color: #f0abfc;
+    text-shadow:
+        0 0 10px #d946ef,
+        0 0 25px #d946ef;
+}
+
+/* ==============================
+   LEGENDARY BOTTOM BANNER
+============================== */
+
+.mythic-banner {
+    width: min(95%, 1050px);
+
+    margin: 35px auto 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+
+    animation: heartbeat 4.5s ease-in-out infinite;
+
+    transform-origin: center;
+}
+
+.mythic-image {
+    width: clamp(70px, 14vw, 135px);
+    height: clamp(70px, 14vw, 135px);
+
+    object-fit: cover;
+
+    border-radius: 25%;
+
+    border: 4px solid #f5d0fe;
+
+    box-shadow:
+        0 0 15px #d946ef,
+        0 0 35px #c026d3,
+        0 0 70px rgba(217,70,239,.7);
+
+    animation: imageHeartbeat 4.5s ease-in-out infinite;
+}
+
+.mythic-text {
+    font-size: clamp(15px, 4vw, 34px);
+
+    font-weight: 1000;
+
+    line-height: 1.15;
+
+    color: white;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 8px #d946ef,
+        0 0 20px #c026d3,
+        0 0 40px #86198f;
+}
+
+.chance {
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: .65em;
+
+    color: #f0abfc;
+}
+
+/* ==============================
+   ANIMATIONS
+============================== */
+
+@keyframes heartbeat {
+
+    0%, 35%, 100% {
+        transform: scale(1);
+    }
+
+    10% {
+        transform: scale(1.06);
+    }
+
+    18% {
+        transform: scale(.985);
+    }
+
+    25% {
+        transform: scale(1.04);
+    }
+}
+
+@keyframes imageHeartbeat {
+
+    0%, 35%, 100% {
+        transform: scale(1);
+    }
+
+    10% {
+        transform: scale(1.13);
+    }
+
+    18% {
+        transform: scale(.98);
+    }
+
+    25% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes resultPop {
+
+    from {
+        opacity: 0;
+        transform: scale(.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 500px) {
+
+    .center-button {
+        width: 82px;
+        height: 82px;
+        font-size: 16px;
+    }
+
+    .mythic-banner {
+        gap: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Divine Prize Wheel</h1>
+
+<div class="subtitle">
+    Spin the wheel and see what you get!
+</div>
+
+<div class="counter">
+    Spins remaining today:
+    <span id="spinsRemaining">5</span> / 5
+</div>
+
+
+<div class="wheel-area">
+
+    <div class="pointer"></div>
+
+    <canvas id="wheel" width="1000" height="1000"></canvas>
+
+    <button class="center-button" id="spinButton">
+        SPIN
+    </button>
+
+</div>
+
+
+<div class="result" id="result">
+
+    <img id="resultImage" src="" alt="Prize">
+
+    <h2 id="resultTitle"></h2>
+
+    <p class="redeem">
+        📸 <strong>Take a screenshot of this prize!</strong>
+        <br><br>
+        Show <strong>Elijah</strong> and he will redeem it for you. Or message 961319323@sandwitch430.org instead.
+    </p>
+
+</div>
+
+
+<!--
+==================================================
+DIVINE MYTHIC BOTTOM BANNER
+==================================================
+-->
+
+<div class="mythic-banner">
+
+    <img
+        class="mythic-image"
+        src="gayity.png?text=DIVINE+MYTHIC"
+        alt="Divine Mythic Gayity"
+    >
+
+    <div class="mythic-text">
+
+        WIN THE DIVINE MYTHIC GAYITY
+
+        <span class="chance">
+            0.0001% CHANCE OF BEING CAUGHT
+        </span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+==================================================
+PRIZES
+==================================================
+
+The last item is the actual legendary wheel slice.
+
+You can replace the image URLs with your own images.
+*/
+
+const prizes = [
+
+    {
+        name: "MLG",
+        image: "MLG!.png?text=RARE",
+        color: "#ef4444",
+        legendary: false
+    },
+
+    {
+        name: "Falsity",
+        image: "falsity.png?text=GOLDEN",
+        color: "#f59e0b",
+        legendary: false
+    },
+
+    {
+        name: "Lovity",
+        image: "lovity.png?text=RARE",
+        color: "#22c55e",
+        legendary: false
+    },
+
+    {
+        name: "Gucci Morty",
+        image: "gucci.png?text=GOLDEN",
+        color: "#06b6d4",
+        legendary: false
+    },
+
+    {
+        name: "Freakity",
+        image: "freakity.png?text=EPIC",
+        color: "#3b82f6",
+        legendary: false
+    },
+
+    {
+        name: "sanic",
+        image: "sanic.png?text=RARE",
+        color: "#8b5cf6",
+        legendary: false
+    },
+
+    {
+        name: "Verity",
+        image: "verity.png?text=MYTHIC",
+        color: "#ec4899",
+        legendary: false
+    },
+
+    {
+        name: "Israel",
+        image: "israel.png?text=COMMON",
+        color: "#f97316",
+        legendary: false
+    },
+
+    /*
+    ==============================================
+    THE LEGENDARY SLICE
+    ==============================================
+    */
+
+    {
+        name: "DIVINE MYTHIC GAYITY",
+        image: "gayity.png?text=DIVINE+MYTHIC",
+        color: "#d946ef",
+        legendary: true
+    }
+
+];
+
+
+/*
+==================================================
+DAILY LIMIT
+==================================================
+*/
+
+const MAX_SPINS = 10;
+
+const STORAGE_KEY = "divineMythicWheelData";
+
+
+function todayKey() {
+
+    const date = new Date();
+
+    return (
+        date.getFullYear() +
+        "-" +
+        String(date.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(date.getDate()).padStart(2, "0")
+    );
+
+}
+
+
+function getData() {
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) {
+
+        return {
+            date: todayKey(),
+            spins: 0
+        };
+
+    }
+
+    try {
+
+        const data = JSON.parse(saved);
+
+        if (data.date !== todayKey()) {
+
+            return {
+                date: todayKey(),
+                spins: 0
+            };
+
+        }
+
+        return data;
+
+    } catch {
+
+        return {
+            date: todayKey(),
+            spins: 0
+        };
+
+    }
+
+}
+
+
+function saveData(data) {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+    );
+
+}
+
+
+function updateCounter() {
+
+    const data = getData();
+
+    const remaining =
+        Math.max(0, MAX_SPINS - data.spins);
+
+    document.getElementById(
+        "spinsRemaining"
+    ).textContent = remaining;
+
+    const button =
+        document.getElementById("spinButton");
+
+    if (remaining <= 0) {
+
+        button.disabled = true;
+        button.textContent = "NO SPINS";
+
+    }
+
+}
+
+
+updateCounter();
+
+
+/*
+==================================================
+CANVAS
+==================================================
+*/
+
+const canvas =
+    document.getElementById("wheel");
+
+const ctx =
+    canvas.getContext("2d");
+
+const center =
+    canvas.width / 2;
+
+const radius =
+    canvas.width * .45;
+
+
+/*
+IMPORTANT:
+
+The pointer is at the TOP of the wheel.
+
+We therefore use -Math.PI / 2 as the pointer angle.
+*/
+
+const pointerAngle =
+    -Math.PI / 2;
+
+let rotation = 0;
+
+let spinning = false;
+
+
+/*
+==================================================
+DRAW WHEEL
+==================================================
+*/
+
+function drawWheel() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const slice =
+        (Math.PI * 2) / prizes.length;
+
+
+    for (let i = 0; i < prizes.length; i++) {
+
+        const prize =
+            prizes[i];
+
+        const start =
+            rotation + i * slice;
+
+        const end =
+            start + slice;
+
+
+        /*
+        Special glow for the legendary slice.
+        */
+
+        if (prize.legendary) {
+
+            ctx.save();
+
+            ctx.shadowColor =
+                "#f0abfc";
+
+            ctx.shadowBlur =
+                40;
+
+        }
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            center,
+            center
+        );
+
+        ctx.arc(
+            center,
+            center,
+            radius,
+            start,
+            end
+        );
+
+        ctx.closePath();
+
+        ctx.fillStyle =
+            prize.color;
+
+        ctx.fill();
+
+
+        ctx.strokeStyle =
+            "#ffffff";
+
+        ctx.lineWidth =
+            prize.legendary ? 12 : 7;
+
+        ctx.stroke();
+
+
+        if (prize.legendary) {
+
+            ctx.restore();
+
+        }
+
+
+        /*
+        ==========================================
+        IMAGE / TEXT
+        ==========================================
+        */
+
+        ctx.save();
+
+        ctx.translate(
+            center,
+            center
+        );
+
+        ctx.rotate(
+            start + slice / 2
+        );
+
+        ctx.textAlign =
+            "right";
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.font =
+            prize.legendary
+                ? "900 30px Arial"
+                : "bold 27px Arial";
+
+        ctx.shadowColor =
+            "rgba(0,0,0,.8)";
+
+        ctx.shadowBlur =
+            7;
+
+
+        /*
+        Legendary text gets a special glow.
+        */
+
+        if (prize.legendary) {
+
+            ctx.shadowColor =
+                "#f5d0fe";
+
+            ctx.shadowBlur =
+                18;
+
+        }
+
+
+        ctx.fillText(
+            prize.name,
+            radius - 35,
+            10
+        );
+
+        ctx.restore();
+
+    }
+
+
+    /*
+    ==========================================
+    OUTER RING
+    ==========================================
+    */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        center,
+        center,
+        radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.strokeStyle =
+        "#ffffff";
+
+    ctx.lineWidth =
+        15;
+
+    ctx.stroke();
+
+
+    /*
+    ==========================================
+    CENTER DECORATION
+    ==========================================
+    */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        center,
+        center,
+        95,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle =
+        "rgba(0,0,0,.25)";
+
+    ctx.fill();
+
+}
+
+
+drawWheel();
+
+
+/*
+==================================================
+SELECT PRIZE
+==================================================
+
+The legendary prize has exactly:
+
+0.0001%
+
+which equals:
+
+1 / 1,000,000
+*/
+
+function choosePrize() {
+
+    const legendaryChance =
+        0.000001;
+
+    if (
+        Math.random() <
+        legendaryChance
+    ) {
+
+        return prizes.find(
+            prize => prize.legendary
+        );
+
+    }
+
+
+    /*
+    Select only normal prizes.
+    */
+
+    const normalPrizes =
+        prizes.filter(
+            prize => !prize.legendary
+        );
+
+    return normalPrizes[
+        Math.floor(
+            Math.random() *
+            normalPrizes.length
+        )
+    ];
+
+}
+
+
+/*
+==================================================
+CALCULATE ROTATION
+==================================================
+
+This makes the wheel physically stop on the
+actual winning slice.
+*/
+
+function rotationForPrize(prize) {
+
+    const index =
+        prizes.indexOf(prize);
+
+    const slice =
+        (Math.PI * 2) / prizes.length;
+
+
+    /*
+    Center of the selected slice.
+    */
+
+    const sliceCenter =
+        index * slice +
+        slice / 2;
+
+
+    /*
+    We want the slice center to line up
+    with the top pointer.
+
+    rotation + sliceCenter = pointerAngle
+    */
+
+    let target =
+        pointerAngle -
+        sliceCenter;
+
+
+    /*
+    Normalize the target rotation.
+    */
+
+    while (
+        target < rotation
+    ) {
+
+        target +=
+            Math.PI * 2;
+
+    }
+
+
+    /*
+    Add multiple complete spins.
+    */
+
+    target +=
+        (7 + Math.floor(Math.random() * 4))
+        * Math.PI * 2;
+
+
+    return target;
+
+}
+
+
+/*
+==================================================
+SPIN BUTTON
+==================================================
+*/
+
+document
+    .getElementById("spinButton")
+    .addEventListener("click", () => {
+
+
+    if (spinning) {
+        return;
+    }
+
+
+    const data =
+        getData();
+
+
+    if (
+        data.spins >= MAX_SPINS
+    ) {
+
+        updateCounter();
+        return;
+
+    }
+
+
+    /*
+    Count the spin immediately.
+    */
+
+    data.spins++;
+
+    saveData(data);
+
+    updateCounter();
+
+
+    /*
+    Choose the actual prize.
+    */
+
+    const winningPrize =
+        choosePrize();
+
+
+    spinning = true;
+
+    const button =
+        document.getElementById(
+            "spinButton"
+        );
+
+    button.disabled = true;
+
+
+    /*
+    Calculate the exact rotation needed
+    to put the winning slice under the pointer.
+    */
+
+    const startRotation =
+        rotation;
+
+    const targetRotation =
+        rotationForPrize(
+            winningPrize
+        );
+
+
+    const duration =
+        5500;
+
+    const startTime =
+        performance.now();
+
+
+    function animate(currentTime) {
+
+        const elapsed =
+            currentTime -
+            startTime;
+
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
+
+        /*
+        Smooth deceleration.
+        */
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                5
+            );
+
+
+        rotation =
+            startRotation +
+            (
+                targetRotation -
+                startRotation
+            ) * eased;
+
+
+        drawWheel();
+
+
+        if (progress < 1) {
+
+            requestAnimationFrame(
+                animate
+            );
+
+        } else {
+
+            rotation =
+                targetRotation;
+
+            drawWheel();
+
+            spinning =
+                false;
+
+
+            showResult(
+                winningPrize
+            );
+
+
+            if (
+                getData().spins <
+                MAX_SPINS
+            ) {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "SPIN";
+
+            }
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        animate
+    );
+
+});
+
+
+/*
+==================================================
+RESULT
+==================================================
+*/
+
+function showResult(prize) {
+
+    const result =
+        document.getElementById(
+            "result"
+        );
+
+    const image =
+        document.getElementById(
+            "resultImage"
+        );
+
+    const title =
+        document.getElementById(
+            "resultTitle"
+        );
+
+
+    image.src =
+        prize.image;
+
+    image.alt =
+        prize.name;
+
+
+    title.textContent =
+        "🎉 You won " +
+        prize.name +
+        "!";
+
+
+    if (prize.legendary) {
+
+        title.classList.add(
+            "legendary-result"
+        );
+
+        result.style.borderColor =
+            "#d946ef";
+
+        result.style.boxShadow =
+            "0 0 60px rgba(217,70,239,.9)";
+
+    } else {
+
+        title.classList.remove(
+            "legendary-result"
+        );
+
+        result.style.borderColor =
+            "";
+
+        result.style.boxShadow =
+            "";
+
+    }
+
+
+    /*
+    Restart popup animation.
+    */
+
+    result.classList.remove(
+        "show"
+    );
+
+    void result.offsetWidth;
+
+    result.classList.add(
+        "show"
+    );
+
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/*
+==================================================
+TESTING
+==================================================
+
+To reset the daily spin counter:
+
+Open the browser console and run:
+
+localStorage.removeItem("divineMythicWheelData");
+
+Then refresh.
+
+DO NOT give players access to this if you need
+the limit to be cheat-proof.
+*/
+
+</script>
+
+</body>
+</html>

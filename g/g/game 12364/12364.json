@@ -48,6 +48,51 @@
     "image": "g/g/game 12364/img/MLG!.png",
     "destination": "Settings.html",
     "cinematic": "short"
+  },
+  "09854": {
+    "item": true,
+    "codeName": "09854",
+    "itemName": "Freakity",
+    "rarity": "rare",
+    "image": "g/g/game 12364/img/freakity.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+  },
+  "05068": {
+    "item": true,
+    "codeName": "05068",
+    "itemName": "Gucci Morty",
+    "rarity": "epic",
+    "image": "g/g/game 12364/img/gucci.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+   },
+  "4498": {
+    "item": true,
+    "codeName": "4498",
+    "itemName": "Israal",
+    "rarity": "rare",
+    "image": "g/g/game 12364/img/israel.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+   },
+  "44598": {
+    "item": true,
+    "codeName": "44598",
+    "itemName": "Lovity",
+    "rarity": "common",
+    "image": "g/g/game 12364/img/lovity.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
+   },
+  "3678": {
+    "item": true,
+    "codeName": "3678",
+    "itemName": "Sanic",
+    "rarity": "common",
+    "image": "g/g/game 12364/img/sanic.png",
+    "destination": "Settings.html",
+    "cinematic": "short"
   }
 }
 
