@@ -1,7 +1,7 @@
 # HollowshotE
 
 My first game site, made by me.
-it features tons of games. Now featuring 114 and they all work offline
+it features tons of games. Now featuring 121 and some of them work offline
 you can either install the file by pressing the green code button and download zip or you can go to my site
 i update the links just in case it gets blocked
 [Changelog](./CHANGELOG.md)) HollowGames ver 1.3 The Hacking Update

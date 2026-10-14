@@ -29,4 +29,17 @@
   
 ## Version 1.3 the hacking update
 
-  
+### Added in 1.3
+
+- Gambling becuase, why not?
+- Bowmasters
+- 1v1.lol
+- Granny 1
+- Granny 2
+- Subway Surfers
+- Fnaf 3
+- Fnaf 4
+
+### Fixed in 1.3
+
+- bug that gave you the mythic gayity everytime

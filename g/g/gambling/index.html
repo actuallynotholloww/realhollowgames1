@@ -383,7 +383,7 @@ DIVINE MYTHIC BOTTOM BANNER
         WIN THE DIVINE MYTHIC GAYITY
 
         <span class="chance">
-            0.2% CHANCE OF BEING CAUGHT
+            0.1% CHANCE OF BEING CAUGHT
         </span>
 
     </div>
@@ -822,17 +822,17 @@ SELECT PRIZE
 
 The legendary prize has exactly:
 
-0.0001%
+0.1%
 
 which equals:
 
-1 / 1,000,000
+1 / 1,000
 */
 
 function choosePrize() {
 
     const legendaryChance =
-        0.2;
+        0.1 / 1000; // 0.0001 = 0.1 / 1000
 
     if (
         Math.random() <
