@@ -18,7 +18,7 @@
     "codeName": "Verity",
     "itemName": "Verity",
     "rarity": "mythic",
-    "image": "g/g/game 12364/img/verity.png",
+    "image": "g/g/game12364/img/verity.png",
     "destination": "Settings.html",
     "cinematic": "short"
   },
@@ -27,7 +27,7 @@
     "codeName": "Falsity",
     "itemName": "Falsity",
     "rarity": "legendary",
-    "image": "g/g/game 12364/img/falsity.png",
+    "image": "g/g/game12364/img/falsity.png",
     "destination": "Settings.html",
     "cinematic": "short"
   },
@@ -36,7 +36,7 @@
     "codeName": "48594",
     "itemName": "gayity",
     "rarity": "mythic",
-    "image": "g/g/game 12364/img/gayity.png",
+    "image": "g/g/game12364/img/gayity.png",
     "destination": "Settings.html",
     "cinematic": "short"
   },
@@ -45,7 +45,7 @@
     "codeName": "supermlg",
     "itemName": "MLG",
     "rarity": "rare",
-    "image": "g/g/game 12364/img/MLG!.png",
+    "image": "g/g/game12364/img/MLG!.png",
     "destination": "Settings.html",
     "cinematic": "short"
   },
@@ -54,7 +54,7 @@
     "codeName": "09854",
     "itemName": "Freakity",
     "rarity": "rare",
-    "image": "g/g/game 12364/img/freakity.png",
+    "image": "g/g/game12364/img/freakity.png",
     "destination": "Settings.html",
     "cinematic": "short"
   },
@@ -63,7 +63,7 @@
     "codeName": "05068",
     "itemName": "Gucci Morty",
     "rarity": "epic",
-    "image": "g/g/game 12364/img/gucci.png",
+    "image": "g/g/game12364/img/gucci.png",
     "destination": "Settings.html",
     "cinematic": "short"
    },
@@ -72,7 +72,7 @@
     "codeName": "4498",
     "itemName": "Israal",
     "rarity": "rare",
-    "image": "g/g/game 12364/img/israel.png",
+    "image": "g/g/game12364/img/israel.png",
     "destination": "Settings.html",
     "cinematic": "short"
    },
@@ -81,7 +81,7 @@
     "codeName": "44598",
     "itemName": "Lovity",
     "rarity": "common",
-    "image": "g/g/game 12364/img/lovity.png",
+    "image": "g/g/game12364/img/lovity.png",
     "destination": "Settings.html",
     "cinematic": "short"
    },
@@ -90,7 +90,7 @@
     "codeName": "3678",
     "itemName": "Sanic",
     "rarity": "common",
-    "image": "g/g/game 12364/img/sanic.png",
+    "image": "g/g/game12364/img/sanic.png",
     "destination": "Settings.html",
     "cinematic": "short"
   }

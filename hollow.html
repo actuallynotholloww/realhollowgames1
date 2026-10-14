@@ -872,7 +872,7 @@ l('itemsTab').addEventListener('click', function() {
 renderOwnedItems();
 
 function loadSecretCodeRegistry() {
-  fetch('g/g/game 12364/12364.json', { cache: 'no-cache' })
+  fetch('g/g/game12364/12364.json', { cache: 'no-cache' })
     .then(function(response) {
       if (!response.ok) {
         throw new Error('HTTP ' + response.status + ' while loading the secret-code registry');
