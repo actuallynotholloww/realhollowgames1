@@ -43,3 +43,5 @@
 ### Fixed in 1.3
 
 - bug that gave you the mythic gayity everytime
+- items being gone
+- cheat code json is now encrypted
