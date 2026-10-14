@@ -820,16 +820,62 @@ function getOwnedItems() {
   }
 }
 
+// The registry file only contains PBKDF2 hashes of the cheat codes, never the codes.
+// These parameters must match hash-registry.js.
+var CODE_HASH_SALT = 'hollow-cheat-registry-v1';
+var CODE_HASH_ITERATIONS = 100000;
+var codeHashCache = Object.create(null);
+
+function hashSecretCode(code) {
+  code = code.trim().toLowerCase();
+  if (Object.prototype.hasOwnProperty.call(codeHashCache, code)) return codeHashCache[code];
+  if (!window.crypto || !window.crypto.subtle) {
+    return Promise.reject(new Error('Web Crypto is unavailable (the page must be served over HTTPS)'));
+  }
+  var encoder = new TextEncoder();
+  var promise = window.crypto.subtle.importKey('raw', encoder.encode(code), 'PBKDF2', false, ['deriveBits'])
+    .then(function(key) {
+      return window.crypto.subtle.deriveBits({
+        name: 'PBKDF2',
+        salt: encoder.encode(CODE_HASH_SALT),
+        iterations: CODE_HASH_ITERATIONS,
+        hash: 'SHA-256'
+      }, key, 256);
+    })
+    .then(function(bits) {
+      return Array.prototype.map.call(new Uint8Array(bits), function(byte) {
+        return ('0' + byte.toString(16)).slice(-2);
+      }).join('');
+    });
+  codeHashCache[code] = promise;
+  return promise;
+}
+
+function checkSecretCode(secretCode) {
+  if (!secretCodeRegistryReady || !secretCode) return;
+  hashSecretCode(secretCode).then(function(hash) {
+    var searchInput = l('searchQuery');
+    // Ignore the result if the visitor kept typing while the hash was computed.
+    if (!searchInput || searchInput.value.trim().toLowerCase() !== secretCode) return;
+    if (Object.prototype.hasOwnProperty.call(secretCodeDestinations, hash)) {
+      activateSecretDestination(secretCode, secretCodeDestinations[hash]);
+    }
+  }).catch(function(error) {
+    console.error('Unable to check cheat code:', error);
+  });
+}
+
 function renderOwnedItems() {
   var container = l('ownedItems');
+  var owned = secretCodeRegistryReady ? getOwnedItems() : [];
+  Promise.all(owned.map(function(item) {
+    return hashSecretCode(item.code).then(function(hash) {
+      return Object.prototype.hasOwnProperty.call(secretCodeDestinations, hash) &&
+        secretCodeDestinations[hash].item !== null ? item : null;
+    });
+  })).then(function(results) {
+  var items = results.filter(Boolean);
   container.textContent = '';
-  var items = secretCodeRegistryReady
-    ? getOwnedItems().filter(function(item) {
-      var code = item.code.trim().toLowerCase();
-      return Object.prototype.hasOwnProperty.call(secretCodeDestinations, code) &&
-        secretCodeDestinations[code].item !== null;
-    })
-    : [];
   items.forEach(function(item) {
     var tile = document.createElement('div');
     tile.className = 'tile';
@@ -852,6 +898,9 @@ function renderOwnedItems() {
   });
   l('emptyItemsMessage').hidden = items.length > 0;
   l('itemsTab').hidden = items.length === 0;
+  }).catch(function(error) {
+    console.error('Unable to render owned items:', error);
+  });
 }
 
 function selectCollection(collection) {
@@ -901,6 +950,9 @@ function loadSecretCodeRegistry() {
         }
 
         var name = code.trim().toLowerCase();
+        if (!/^[0-9a-f]{64}$/.test(name)) {
+          throw new Error('Registry keys must be 64-character hex hashes (run hash-registry.js on the plaintext registry)');
+        }
         if (!name || (!isItem && !html.trim())) {
           throw new Error('Cheat code names and destinations cannot be empty');
         }
@@ -910,7 +962,6 @@ function loadSecretCodeRegistry() {
 
         var itemConfig = null;
         if (isItem) {
-          var codeName = typeof entry.codeName === 'string' ? entry.codeName.trim() : code;
           var itemName = typeof entry.itemName === 'string'
             ? entry.itemName.trim()
             : typeof entry.name === 'string' ? entry.name.trim() : '';
@@ -922,15 +973,14 @@ function loadSecretCodeRegistry() {
             legendary: 'Legendary',
             mythic: 'Mythic'
           };
-          if (!codeName || !itemName || typeof entry.image !== 'string' || !entry.image.trim() || !rarities[rarity]) {
-            throw new Error('Item cheat code "' + name + '" must provide codeName, itemName, a supported rarity, and an image path');
+          if (!itemName || typeof entry.image !== 'string' || !entry.image.trim() || !rarities[rarity]) {
+            throw new Error('Item cheat code "' + name + '" must provide itemName, a supported rarity, and an image path');
           }
           var itemImage = new URL(entry.image.trim(), window.location.href);
           if (itemImage.protocol !== 'http:' && itemImage.protocol !== 'https:') {
             throw new Error('Image for item cheat code "' + name + '" must use HTTP or HTTPS');
           }
           itemConfig = {
-            codeName: codeName,
             itemName: itemName,
             image: entry.image.trim(),
             rarity: rarities[rarity]
@@ -1426,10 +1476,7 @@ var input, filter, ul, li, a, i;
 input = l("searchQuery");
 filter = input.value.toUpperCase();
 var secretCode = input.value.trim().toLowerCase();
-if (secretCodeRegistryReady && Object.prototype.hasOwnProperty.call(secretCodeDestinations, secretCode)) {
-activateSecretDestination(secretCode, secretCodeDestinations[secretCode]);
-return;
-}
+checkSecretCode(secretCode);
 ul = document.body;
 li = ul.getElementsByClassName("tile");
 for (i = 0; i < li.length; i++) {
