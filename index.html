@@ -6,13 +6,13 @@
     <title>Disclaimer</title>
     <script>
         // Check if the user has already seen the disclaimer
-        if (localStorage.getItem("seenDisclaimer") === "true") {
+        if (localStorage.getItem("seenDisclaimer") === "hj") {
             window.location.href = "hollow.html";
         }
 
         function proceedToHollow() {
             // Save that the user has seen the disclaimer
-            localStorage.setItem("seenDisclaimer", "true");
+            localStorage.setItem("seenDisclaimer", "hj");
             // Redirect to hollow.html
             window.location.href = "hollow.html";
         }
@@ -64,8 +64,8 @@
 <body>
 
     <div class="disclaimer-box">
-        <h2>Disclaimer</h2>
-        <p>The spin the wheel was broken, but it's fixed now. Anyone who won the Mythic Verity in the last 2 hours doesn't count.</p>
+        <h2>Warning</h2>
+        <p>=This site is no longer being maintained becuase my shool blocked github entirly... so, its been a good run folks... but, all good things must come to a end</p>
         <button onclick="proceedToHollow()">Go to Hollow Games</button>
     </div>
 
